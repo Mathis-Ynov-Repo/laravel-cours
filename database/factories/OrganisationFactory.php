@@ -21,8 +21,23 @@ class OrganisationFactory extends Factory
      */
     public function definition()
     {
+        $randomNumber = $this->faker->numberBetween(1, 3);
+        $randomWord = "";
+        if ($randomNumber === 3) {
+            $randomWord = "school";
+        } else if ($randomNumber === 2) {
+            $randomWord = "client";
+        } else {
+            $randomWord = "government";
+        }
         return [
-            //
+            'id' => $this->faker->uuid(),
+            'name' => $this->faker->name(),
+            'slug' => $this->faker->unique()->slug(),
+            'email' => $this->faker->unique()->safeEmail(),
+            'phone' => $this->faker->phoneNumber(),
+            'address' => $this->faker->address(),
+            'type' => $this->faker->randomElement(['school', 'government', 'client']),
         ];
     }
 }
