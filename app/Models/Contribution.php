@@ -10,6 +10,8 @@ class Contribution extends Model
     use HasFactory;
 
     public $incrementing = false;
+    protected $with = ['transaction'];
+
 
     protected $fillable = [
         'price',
@@ -17,4 +19,9 @@ class Contribution extends Model
         'comment',
         'address'
     ];
+
+    public function transaction()
+    {
+        return $this->morphMany(Transaction::class, 'source');
+    }
 }

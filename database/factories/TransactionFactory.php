@@ -21,8 +21,8 @@ class TransactionFactory extends Factory
      */
     public function definition()
     {
-        $sourceType = $this->faker->randomElement(['missions', 'contributions']);
-        $sourceId = $sourceType == "missions" ? \App\Models\Mission::inRandomOrder()->first()->id : \App\Models\Contribution::inRandomOrder()->first()->id;
+        $sourceType = $this->faker->randomElement(['\App\Models\Mission', '\App\Models\Contribution']);
+        $sourceId = $sourceType == "\App\Models\Mission" ? \App\Models\Mission::inRandomOrder()->first()->id : \App\Models\Contribution::inRandomOrder()->first()->id;
         return [
             'id' => $this->faker->uuid(),
             'source_type' => $sourceType,

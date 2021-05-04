@@ -11,6 +11,9 @@ class Mission extends Model
 
     public $incrementing = false;
 
+    protected $with = ['organisation', 'missionLines', 'transactions'];
+    // protected $with = ['transactions'];
+
 
     protected $fillable = [
         'reference',
@@ -26,5 +29,9 @@ class Mission extends Model
     public function missionLines()
     {
         return $this->hasMany(MissionLine::class);
+    }
+    public function transactions()
+    {
+        return $this->morphMany(Transaction::class, 'source');
     }
 }
