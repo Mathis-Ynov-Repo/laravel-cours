@@ -11,6 +11,7 @@ class Organisation extends Model
 
     public $incrementing = false;
 
+
     protected $fillable = [
         'slug',
         'name',

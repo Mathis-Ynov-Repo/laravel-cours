@@ -14,7 +14,7 @@ class MissionLineController extends Controller
      */
     public function index()
     {
-        //
+        return MissionLine::get();
     }
 
     /**

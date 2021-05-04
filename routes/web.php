@@ -1,5 +1,11 @@
 <?php
 
+use App\Http\Controllers\ContributionController;
+use App\Http\Controllers\MissionController;
+use App\Http\Controllers\MissionLineController;
+use App\Http\Controllers\OrganisationController;
+use App\Http\Controllers\TransactionController;
+use App\Http\Controllers\SocialiteController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -15,4 +21,24 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
     return view('welcome');
-});
+})->name('welcome');
+
+# Socialite URLs
+
+// La page où on présente les liens de redirection vers les providers
+Route::get("login-register", [SocialiteController::class, 'loginRegister']);
+
+// La redirection vers le provider
+Route::get("redirect/{provider}", [SocialiteController::class, 'redirect'])->name('socialite.redirect');
+
+// Le callback du provider
+Route::get("callback/{provider}", [SocialiteController::class, 'callback'])->name('socialite.callback');
+
+Route::resource('organisations', OrganisationController::class);
+
+
+Route::resource('contribution', ContributionController::class);
+Route::resource('mission', MissionController::class);
+Route::resource('mission-line', MissionLineController::class);
+// Route::resource('organisation', OrganisationController::class)->except(['create']);
+Route::resource('transaction', TransactionController::class);

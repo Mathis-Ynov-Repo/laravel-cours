@@ -14,7 +14,7 @@ class ContributionController extends Controller
      */
     public function index()
     {
-        //
+        return Contribution::get();
     }
 
     /**
@@ -46,7 +46,7 @@ class ContributionController extends Controller
      */
     public function show(Contribution $contribution)
     {
-        //
+        return $contribution;
     }
 
     /**
@@ -69,7 +69,11 @@ class ContributionController extends Controller
      */
     public function update(Request $request, Contribution $contribution)
     {
-        //
+        $contribution->price = $request->price;
+        $contribution->title = $request->title;
+        $contribution->comment = $request->comment;
+        $contribution->address = $request->address;
+        $contribution->save();
     }
 
     /**
@@ -80,6 +84,6 @@ class ContributionController extends Controller
      */
     public function destroy(Contribution $contribution)
     {
-        //
+        Contribution::destroy($contribution);
     }
 }

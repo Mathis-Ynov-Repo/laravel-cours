@@ -19,7 +19,7 @@ class CreateContributionsTable extends Migration
             $table->string(column: 'title')->nullable();
             $table->text(column: 'comment')->nullable();
             $table->uuid(column: 'organisation_id')->nullable();
-            $table->foreign('organisation_id')->references('id')->on('organisations');
+            $table->foreign('organisation_id')->references('id')->on('organisations')->onDelete('cascade');
 
             $table->timestamps();
         });

@@ -20,7 +20,7 @@ class CreateMissionLinesTable extends Migration
             $table->integer(column: 'quantity')->nullable();
             $table->integer(column: 'price')->nullable();
             $table->string(column: 'unity')->nullable();
-            $table->foreign('mission_id')->references('id')->on('missions');
+            $table->foreign('mission_id')->references('id')->on('missions')->onDelete('cascade');
             $table->timestamps();
         });
     }

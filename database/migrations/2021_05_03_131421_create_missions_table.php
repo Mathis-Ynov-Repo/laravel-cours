@@ -21,7 +21,7 @@ class CreateMissionsTable extends Migration
             $table->string(column: 'comment')->nullable();
             $table->integer(column: 'deposit')->nullable();
             $table->date(column: 'ended_at')->nullable();
-            $table->foreign('organisation_id')->references('id')->on('organisations');
+            $table->foreign('organisation_id')->references('id')->on('organisations')->onDelete('cascade');
             $table->timestamps();
         });
     }

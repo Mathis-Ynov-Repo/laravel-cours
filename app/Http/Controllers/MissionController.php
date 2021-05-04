@@ -14,7 +14,7 @@ class MissionController extends Controller
      */
     public function index()
     {
-        //
+        return Mission::get();
     }
 
     /**

@@ -3,7 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Models\Organisation;
+use Illuminate\Support\Str;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\Rule;
 
 class OrganisationController extends Controller
 {
@@ -14,7 +17,8 @@ class OrganisationController extends Controller
      */
     public function index()
     {
-        //
+        // return Organisation::with('missions')->get();
+        return view('organisations.index', ['organisations' => Organisation::with('missions')->get()]);
     }
 
     /**
@@ -24,7 +28,7 @@ class OrganisationController extends Controller
      */
     public function create()
     {
-        //
+        return view('organisations.create');
     }
 
     /**
@@ -35,7 +39,30 @@ class OrganisationController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $validated = Validator::make($request->all(), [
+            'slug' => 'required|unique:organisations|string|max:255',
+            'name' => 'required|max:255',
+            'address' => 'required',
+            'type' => ['required', Rule::in(['school', 'client', 'government'])]
+
+        ]);
+
+        if ($validated->fails()) {
+            return redirect()->route('organisations.create')
+                ->withErrors($validated)
+                ->withInput();
+        }
+        $organisation = new Organisation();
+        $organisation->id = Str::uuid();
+        $organisation->address = $request->address;
+        $organisation->slug = $request->slug;
+        $organisation->email = $request->email;
+        $organisation->name = $request->name;
+        $organisation->phone = $request->phone;
+        $organisation->type = $request->type;
+        $organisation->save();
+        return redirect()->route('organisations.index')
+            ->with('success', 'Orga created');
     }
 
     /**
@@ -46,7 +73,8 @@ class OrganisationController extends Controller
      */
     public function show(Organisation $organisation)
     {
-        //
+        // return $organisation->load('missions');
+        return view('organisations.show', ['organisation' => $organisation->load('missions')]);
     }
 
     /**
@@ -57,7 +85,7 @@ class OrganisationController extends Controller
      */
     public function edit(Organisation $organisation)
     {
-        //
+        return view('organisations.edit', compact('organisation'));
     }
 
     /**
@@ -69,7 +97,27 @@ class OrganisationController extends Controller
      */
     public function update(Request $request, Organisation $organisation)
     {
-        //
+        $validator = Validator::make($request->all(), [
+            'name' => 'required|max:255',
+            'address' => 'required',
+            'type' => ['required', Rule::in(['school', 'client', 'government'])]
+
+        ]);
+        if ($validator->fails()) {
+            return redirect()->route('organisations.edit', $organisation->id)
+                ->withErrors($validator)
+                ->withInput();
+        }
+        $organisation->address = $request->address;
+        // $organisation->slug = $request->slug;
+        $organisation->email = $request->email;
+        $organisation->name = $request->name;
+        $organisation->phone = $request->phone;
+        $organisation->type = $request->type;
+        $organisation->save();
+
+        return redirect()->route('organisations.index')
+            ->with('success', 'Orga updated successfully');
     }
 
     /**
@@ -80,6 +128,7 @@ class OrganisationController extends Controller
      */
     public function destroy(Organisation $organisation)
     {
-        //
+        $organisation->delete();
+        return redirect()->route('organisations.index')->with('success', 'Organisation deleted');
     }
 }
