@@ -14,7 +14,7 @@ class TransactionController extends Controller
      */
     public function index()
     {
-        return Transaction::get();
+        return view('transactions.index', ['transactions' => Transaction::get()]);
     }
 
     /**

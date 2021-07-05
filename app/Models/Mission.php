@@ -34,4 +34,14 @@ class Mission extends Model
     {
         return $this->morphMany(Transaction::class, 'source');
     }
+
+    public function delete()
+    {
+        $res = parent::delete();
+        if ($res == true) {
+            $relation = $this->transactions()->getParent();
+            $trans = Transaction::where('source_id', $relation->id)->first();
+            $trans->delete();
+        }
+    }
 }

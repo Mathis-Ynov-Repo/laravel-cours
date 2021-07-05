@@ -24,6 +24,7 @@ Route::get('/', function () {
 })->name('welcome');
 
 # Socialite URLs
+//TODO Protéger les routes avec le login
 
 // La page où on présente les liens de redirection vers les providers
 Route::get("login-register", [SocialiteController::class, 'loginRegister']);
@@ -38,10 +39,8 @@ Route::resource('organisations', OrganisationController::class);
 
 Route::resource('contribution', ContributionController::class);
 Route::resource('missions', MissionController::class);
-// Route::get('missions/{organisation_id}', MissionController::class);
 
 Route::resource('mission_lines', MissionLineController::class);
-// Route::resource('organisation', OrganisationController::class)->except(['create']);
-Route::resource('transaction', TransactionController::class);
+Route::resource('transactions', TransactionController::class);
 
 Route::get('/mission/{mission}/pdf', [MissionController::class, 'createPDF']);

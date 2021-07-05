@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Mission;
+use App\Models\Transaction;
 use Barryvdh\DomPDF\Facade as PDF;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
@@ -63,6 +64,12 @@ class MissionController extends Controller
         $mission->deposit = $request->deposit;
         $mission->ended_at = $request->ended_at;
         $mission->save();
+        $transaction = new Transaction();
+        $transaction->id = Str::uuid();
+        $transaction->source_type = '\App\Models\Mission';
+        $transaction->source_id = $mission->id;
+        $transaction->price = $mission->deposit;
+        $transaction->save();
         return redirect()->route('organisations.edit', $request->organisation_id)
             ->with('success', 'Mission added');
     }
