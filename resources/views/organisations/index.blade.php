@@ -5,6 +5,10 @@
             <div class="pull-left">
                 <h2>Laravel 8 CRUD </h2>
             </div>
+            <div >
+                <a class="btn btn-secondary" href="{{ route('transactions.index') }}" title="Create an organisation"> Vos Transactions
+                    </a>
+            </div>
             <div class="pull-right">
                 <a class="btn btn-success" href="{{ route('organisations.create') }}" title="Create an organisation"> <i class="fas fa-plus-circle"></i>
                     </a>

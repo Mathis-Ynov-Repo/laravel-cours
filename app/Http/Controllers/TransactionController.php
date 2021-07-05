@@ -12,9 +12,35 @@ class TransactionController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        return view('transactions.index', ['transactions' => Transaction::get()]);
+        $type = $request->query->get("type");
+        $paid = $request->query->get("paid");
+        $year = $request->query->get("year");
+
+        $transactions = Transaction::get();
+        $conditions = [];
+        if ($type) {
+            $conditions[] = ["source_type", '\App\Models\\' . ucfirst($type)];
+            $transactions = Transaction::where("source_type", '\App\Models\\' . ucfirst($type))->get();
+        }
+        if ($paid) {
+            $conditions[] = ["paid_at", '<>', NULL];
+        }
+        if ($year) {
+
+            $transactions->filter(function ($value) {
+                return $value->created_at->year == $year;
+            });
+        }
+        if (count($conditions) > 0) {
+
+            $transactions = Transaction::where($conditions)->get();
+
+            return view('transactions.index', ['transactions' => $transactions]);
+        }
+
+        return view('transactions.index', ['transactions' => $transactions]);
     }
 
     /**

@@ -19,9 +19,12 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-})->name('welcome');
+// Route::get('/', function () {
+//     return view('welcome');
+// })->name('welcome');
+
+
+Route::get('/', [OrganisationController::class, 'index']);
 
 # Socialite URLs
 //TODO Protéger les routes avec le login

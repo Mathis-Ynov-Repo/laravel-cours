@@ -18,6 +18,8 @@ class CreateTransactionsTable extends Migration
             $table->string(column: 'source_type')->nullable();
             $table->uuid(column: 'source_id')->nullable();
             $table->integer(column: 'price')->nullable();
+            $table->date(column: 'paid_at')->nullable();
+
             // $table->foreign('source_id')->references('id')->on('');
             $table->timestamps();
         });
