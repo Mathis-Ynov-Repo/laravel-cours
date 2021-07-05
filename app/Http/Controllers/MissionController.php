@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Mission;
+use Barryvdh\DomPDF\Facade as PDF;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
@@ -106,8 +107,27 @@ class MissionController extends Controller
      * @param  \App\Models\Mission  $mission
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Mission $mission)
+    public function destroy(Mission $mission, Request $request)
     {
-        //
+        $organisation = $request->query->get('organisation_id');
+        $mission->delete();
+        return redirect()->route('organisations.edit', $organisation)->with('success', 'Mission deleted');
+    }
+
+    // Generate PDF
+    public function createPDF(Mission $mission)
+    {
+        $total = 0;
+        foreach ($mission->missionLines as $line)
+            $total += $line->price * $line->quantity;
+
+        // share data to view
+        view()->share('mission', $mission);
+        view()->share('total', $total);
+
+        $pdf = PDF::loadView('pdfview',  [$mission, $total]);
+
+        // download PDF file with download method
+        return $pdf->download('pdf_file.pdf');
     }
 }

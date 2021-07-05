@@ -81,6 +81,7 @@
                 <button type="submit" class="btn btn-primary">Submit</button>
             </div>
         </div>
+    </form>
 
         <div class="col-xs-12 col-sm-12 col-md-12">
             <h3>Missions <a href="{{ route('missions.create', ['organisation_id' => $organisation->id]) }}" class="btn btn-secondary">Add a mission</a>
@@ -88,10 +89,16 @@
         </div>
         @if(count($organisation->missions) > 0)
             @foreach ($organisation->missions as $mission)
-                <h4>{{$mission->title}} ({{count($mission->missionLines)}} {{count($mission->missionLines) > 1 ? 'sub-missions' :'sub-mission' }}) <a href="{{ route('mission_lines.create', ['mission_id' => $mission->id, 'organisation_id' => $organisation->id]) }}" class="btn btn-secondary">Add a sub-mission</a> 
+            <div style="display: flex; align-items: center; width: 35%; justify-content : space-around">{{$mission->title}} ({{count($mission->missionLines)}} {{count($mission->missionLines) > 1 ? 'sub-missions' :'sub-mission' }}) 
+                <a href="{{ route('mission_lines.create', ['mission_id' => $mission->id, 'organisation_id' => $organisation->id]) }}" class="btn btn-secondary">Add a sub-mission</a> 
                 <a href="{{ route('missions.create', $mission->id) }}" class="btn btn-warning">Edit</a>
-                <a href="{{ route('missions.create', $mission->id) }}" class="btn btn-danger">Delete</a></h4> 
-
+                <form style="margin: 0" action="{{ route('missions.destroy', ['mission' => $mission, 'organisation_id' => $organisation->id]) }}" method="POST">
+                    @method('DELETE')
+                    @csrf
+                    <button class="btn btn-danger" type="submit">Delete</i></button>
+                </form>
+                <a class="btn btn-primary" href="{{ URL::to('/mission/'.$mission->id.'/pdf') }}">Export to PDF</a>
+            </div> 
                 @if(count($mission->missionLines) > 0)
                 <ul>
                     @foreach ($mission->missionLines as $line)

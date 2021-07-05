@@ -43,3 +43,5 @@ Route::resource('missions', MissionController::class);
 Route::resource('mission_lines', MissionLineController::class);
 // Route::resource('organisation', OrganisationController::class)->except(['create']);
 Route::resource('transaction', TransactionController::class);
+
+Route::get('/mission/{mission}/pdf', [MissionController::class, 'createPDF']);
