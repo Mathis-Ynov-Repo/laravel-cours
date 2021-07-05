@@ -4,6 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Models\MissionLine;
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
+
+use Illuminate\Support\Facades\Validator;
 
 class MissionLineController extends Controller
 {
@@ -22,9 +25,11 @@ class MissionLineController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function create(Request $request)
     {
-        //
+        $mission = $request->query->get('mission_id');
+        $organisaiton = $request->query->get('organisation_id');
+        return view('mission_lines.create')->with(['mission_id' => $mission, 'organisation_id' => $organisaiton]);
     }
 
     /**
@@ -35,7 +40,29 @@ class MissionLineController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $validated = Validator::make($request->all(), [
+            'mission_id' => 'required',
+            'title' => 'required',
+            'quantity' => 'required',
+            'price' => 'required',
+            'unity' => 'required',
+        ]);
+
+        if ($validated->fails()) {
+            return redirect()->route('mission_lines.create', ['mission_id' => $request->mission_id, 'organisation_id' => $request->organisation_id])
+                ->withErrors($validated)
+                ->withInput();
+        }
+        $mission = new MissionLine();
+        $mission->id = Str::uuid();
+        $mission->mission_id = $request->mission_id;
+        $mission->title = $request->title;
+        $mission->quantity = $request->quantity;
+        $mission->price = $request->price;
+        $mission->unity = $request->unity;
+        $mission->save();
+        return redirect()->route('organisations.edit', $request->organisation_id)
+            ->with('success', 'Sub-mission added');
     }
 
     /**
@@ -78,8 +105,10 @@ class MissionLineController extends Controller
      * @param  \App\Models\MissionLine  $missionLine
      * @return \Illuminate\Http\Response
      */
-    public function destroy(MissionLine $missionLine)
+    public function destroy(MissionLine $missionLine, Request $request)
     {
-        //
+        $organisation = $request->query->get('organisation_id');
+        $missionLine->delete();
+        return redirect()->route('organisations.edit', $organisation)->with('success', 'Sub-mission deleted');
     }
 }

@@ -36,9 +36,10 @@ Route::get("callback/{provider}", [SocialiteController::class, 'callback'])->nam
 
 Route::resource('organisations', OrganisationController::class);
 
-
 Route::resource('contribution', ContributionController::class);
-Route::resource('mission', MissionController::class);
-Route::resource('mission-line', MissionLineController::class);
+Route::resource('missions', MissionController::class);
+// Route::get('missions/{organisation_id}', MissionController::class);
+
+Route::resource('mission_lines', MissionLineController::class);
 // Route::resource('organisation', OrganisationController::class)->except(['create']);
 Route::resource('transaction', TransactionController::class);

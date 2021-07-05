@@ -4,6 +4,10 @@ namespace App\Http\Controllers;
 
 use App\Models\Mission;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Str;
+
+
 
 class MissionController extends Controller
 {
@@ -22,9 +26,10 @@ class MissionController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function create(Request $request)
     {
-        //
+        $orga = $request->query->get('organisation_id');
+        return view('missions.create')->with('organisation_id', $orga);
     }
 
     /**
@@ -35,7 +40,30 @@ class MissionController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $validated = Validator::make($request->all(), [
+            'reference' => 'required|max:255',
+            'organisation_id' => 'required',
+            'title' => 'required',
+            'deposit' => 'required',
+            'ended_at' => 'required',
+        ]);
+
+        if ($validated->fails()) {
+            return redirect()->route('missions.create', ['organisation_id' => $request->organisation_id])
+                ->withErrors($validated)
+                ->withInput();
+        }
+        $mission = new Mission();
+        $mission->id = Str::uuid();
+        $mission->reference = $request->reference;
+        $mission->organisation_id = $request->organisation_id;
+        $mission->title = $request->title;
+        $mission->comment = $request->comment;
+        $mission->deposit = $request->deposit;
+        $mission->ended_at = $request->ended_at;
+        $mission->save();
+        return redirect()->route('organisations.edit', $request->organisation_id)
+            ->with('success', 'Mission added');
     }
 
     /**

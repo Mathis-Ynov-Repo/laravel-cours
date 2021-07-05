@@ -33,7 +33,7 @@
 
     @show
 
-    <div class="container">
+    <div class="container-fluid">
     {{-- <div > --}}
 
         @yield('content')

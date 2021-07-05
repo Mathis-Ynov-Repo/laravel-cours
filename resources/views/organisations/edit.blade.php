@@ -1,5 +1,9 @@
 @extends('layouts.app')
-
+@if ($message = Session::get('success'))
+        <div class="alert alert-success">
+            <p>{{ $message }}</p>
+        </div>
+    @endif
 @section('content')
     <div class="row">
         <div class="col-lg-12 margin-tb">
@@ -78,5 +82,31 @@
             </div>
         </div>
 
+        <div class="col-xs-12 col-sm-12 col-md-12">
+            <h3>Missions <a href="{{ route('missions.create', ['organisation_id' => $organisation->id]) }}" class="btn btn-secondary">Add a mission</a>
+            </h3>
+        </div>
+        @if(count($organisation->missions) > 0)
+            @foreach ($organisation->missions as $mission)
+                <h4>{{$mission->title}} ({{count($mission->missionLines)}} {{count($mission->missionLines) > 1 ? 'sub-missions' :'sub-mission' }}) <a href="{{ route('mission_lines.create', ['mission_id' => $mission->id, 'organisation_id' => $organisation->id]) }}" class="btn btn-secondary">Add a sub-mission</a> 
+                <a href="{{ route('missions.create', $mission->id) }}" class="btn btn-warning">Edit</a>
+                <a href="{{ route('missions.create', $mission->id) }}" class="btn btn-danger">Delete</a></h4> 
+
+                @if(count($mission->missionLines) > 0)
+                <ul>
+                    @foreach ($mission->missionLines as $line)
+                        <li style="display: flex; align-items: center">
+                            <span style="padding: 5px">{{$line->title}} </span>
+                            <form style="margin: 0" action="{{ route('mission_lines.destroy', ['mission_line' => $line, 'organisation_id' => $organisation->id]) }}" method="POST">
+                                @method('DELETE')
+                                @csrf
+                                <button type="submit"><i style="color: red" class="fas fa-times"></i></button>
+                            </form>
+                    @endforeach
+                </ul>
+                @endif
+            @endforeach
+        @endif
+        
     </form>
 @endsection
