@@ -63,16 +63,16 @@ class MissionController extends Controller
         $mission->title = $request->title;
         $mission->comment = $request->comment;
         $mission->deposit = $request->deposit;
-        $mission->ended_at = $request->ended_at;
         $mission->save();
         $transaction = new Transaction();
         $transaction->id = Str::uuid();
         $transaction->source_type = '\App\Models\Mission';
         $transaction->source_id = $mission->id;
-        $transaction->price = $mission->deposit;
-        $transaction->save();
+
         if (isset($request->missionLines)) {
+            $totalPrice = 0;
             foreach ($request->missionLines as $missionLine) {
+                $totalPrice += $missionLine['price'] * $missionLine['quantity'];
                 $newMissionLine = new MissionLine();
                 $newMissionLine->id = Str::uuid();
                 $newMissionLine->mission_id = $mission->id;
@@ -82,7 +82,12 @@ class MissionController extends Controller
                 $newMissionLine->unity = $missionLine['unity'];
                 $newMissionLine->save();
             }
+            $transaction->price = $totalPrice;
+        } else {
+            $transaction->price = 0;
         }
+        $transaction->save();
+
         return redirect()->route('organisations.edit', $request->organisation_id)
             ->with('success', 'Mission added');
     }
@@ -118,7 +123,13 @@ class MissionController extends Controller
      */
     public function update(Request $request, Mission $mission)
     {
-        //
+        $organisation = $request->query->get('organisation_id');
+        $transaction = Transaction::where('source_id', $mission->id)->first();
+        $transaction->paid_at = date("Y-m-d H:i:s");
+        $transaction->save();
+        $mission->ended_at = date("Y-m-d H:i:s");
+        $mission->save();
+        return redirect()->route('organisations.edit', $organisation)->with('success', 'Mission updated');
     }
 
     /**

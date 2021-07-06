@@ -40,7 +40,7 @@ Route::get("callback/{provider}", [SocialiteController::class, 'callback'])->nam
 
 Route::resource('organisations', OrganisationController::class)->middleware('auth');
 
-Route::resource('contribution', ContributionController::class)->middleware('auth');
+Route::resource('contributions', ContributionController::class)->middleware('auth');
 Route::resource('missions', MissionController::class)->middleware('auth');
 
 Route::resource('mission_lines', MissionLineController::class)->middleware('auth');

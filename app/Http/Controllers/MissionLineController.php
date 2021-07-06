@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\MissionLine;
+use App\Models\Transaction;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 
@@ -61,6 +62,9 @@ class MissionLineController extends Controller
         $mission->price = $request->price;
         $mission->unity = $request->unity;
         $mission->save();
+        $transaction = Transaction::where('source_id', $request->mission_id)->first();
+        $transaction->price += $request->price * $request->quantity;
+        $transaction->save();
         return redirect()->route('organisations.edit', $request->organisation_id)
             ->with('success', 'Sub-mission added');
     }

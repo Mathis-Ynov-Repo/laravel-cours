@@ -56,12 +56,7 @@
                         >
                 </div>
             </div> --}}
-            <div class="col-xs-12 col-sm-12 col-md-12" id="endRow">
-                <div class="form-group">
-                    <strong>ended_at :</strong>
-                    <input type="date" name="ended_at" class="form-control" >
-                </div>
-            </div>
+            
             <a id="addLine" style="padding: 2em; cursor : pointer">Add mission line</a>
             <div class="col-xs-12 col-sm-12 col-md-12 text-center" id="submitBtn">
                 <button type="submit" class="btn btn-primary">Submit</button>
