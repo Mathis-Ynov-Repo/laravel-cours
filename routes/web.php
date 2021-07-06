@@ -47,3 +47,7 @@ Route::resource('mission_lines', MissionLineController::class)->middleware('auth
 Route::resource('transactions', TransactionController::class)->middleware('auth');
 
 Route::get('/mission/{mission}/pdf', [MissionController::class, 'createPDF'])->middleware('auth');
+Route::get('/mission/{mission}/devis', [MissionController::class, 'createDevisPDF'])->middleware('auth');
+Route::get('/mission/{mission}/facture-accompte', [MissionController::class, 'createFactureAccomptePDF'])->middleware('auth');
+Route::get('/mission/{mission}/facture-solde', [MissionController::class, 'createFactureSoldePDF'])->middleware('auth');
+Route::get('/mission/{mission}/facture-no-devis', [MissionController::class, 'createFactureNoDevisPDF'])->middleware('auth');

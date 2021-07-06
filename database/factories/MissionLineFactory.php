@@ -26,7 +26,7 @@ class MissionLineFactory extends Factory
             'quantity' => $this->faker->numberBetween(1, 15),
             'title' => $this->faker->word(),
             'price' => $this->faker->numberBetween(1, 1000),
-            'unity' => $this->faker->randomElement(['units', 'kg', 'cm']),
+            'unity' => $this->faker->randomElement(['heures', 'jours']),
             // 'mission_id' => $this->faker->numberBetween(1, 20),
         ];
     }

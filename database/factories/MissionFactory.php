@@ -26,7 +26,7 @@ class MissionFactory extends Factory
             'reference' => $this->faker->word(),
             'title' => $this->faker->word(),
             'comment' => $this->faker->word(),
-            'deposit' => $this->faker->numberBetween(1, 1000),
+            'deposit' => $this->faker->numberBetween(1, 100),
             // 'organisation_id' => \App\Models\Organisation::inRandomOrder()->first(),
             'ended_at' => $this->faker->date(),
         ];

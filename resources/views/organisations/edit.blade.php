@@ -89,7 +89,7 @@
         </div>
         @if(count($organisation->missions) > 0)
             @foreach ($organisation->missions as $mission)
-            <div style="display: flex; align-items: center; width: 35%; justify-content : space-around">{{$mission->title}} ({{count($mission->missionLines)}} {{count($mission->missionLines) > 1 ? 'sub-missions' :'sub-mission' }}) 
+            <div style="display: flex; align-items: center; width: 50%; justify-content : space-around">{{$mission->title}} ({{count($mission->missionLines)}} {{count($mission->missionLines) > 1 ? 'sub-missions' :'sub-mission' }}) 
                 @if ($mission->ended_at == null)
                     <a href="{{ route('mission_lines.create', ['mission_id' => $mission->id, 'organisation_id' => $organisation->id]) }}" class="btn btn-secondary">Add a sub-mission</a> 
                     <form style="margin: 0" action="{{ route('missions.update', ['mission' => $mission, 'organisation_id' => $organisation->id]) }}" method="POST">
@@ -106,7 +106,13 @@
                     @csrf
                     <button class="btn btn-danger" type="submit">Delete</i></button>
                 </form>
-                <a class="btn btn-primary" href="{{ URL::to('/mission/'.$mission->id.'/pdf') }}">Export to PDF</a>
+                {{-- <a class="btn btn-primary" href="{{ URL::to('/mission/'.$mission->id.'/pdf') }}">Export to PDF</a> --}}
+                <a class="btn btn-primary" href="{{ URL::to('/mission/'.$mission->id.'/devis') }}">Devis</a>
+                <a class="btn btn-primary" href="{{ URL::to('/mission/'.$mission->id.'/facture-accompte') }}">Facture d'accompte</a>
+                <a class="btn btn-primary" href="{{ URL::to('/mission/'.$mission->id.'/facture-solde') }}">Facture solde</a>
+                <a class="btn btn-primary" href="{{ URL::to('/mission/'.$mission->id.'/facture-no-devis') }}">Facture sans devis</a>
+
+
             </div> 
                 @if(count($mission->missionLines) > 0)
                 <ul>

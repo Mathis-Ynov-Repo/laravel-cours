@@ -161,4 +161,65 @@ class MissionController extends Controller
         // download PDF file with download method
         return $pdf->download('pdf_file.pdf');
     }
+
+    public function createDevisPDF(Mission $mission)
+    {
+        $total = 0;
+        foreach ($mission->missionLines as $line)
+            $total += $line->price * $line->quantity;
+
+        // share data to view
+        view()->share('mission', $mission);
+        view()->share('total', $total);
+
+        $pdf = PDF::loadView('pdf.devis',  [$mission, $total]);
+
+        // download PDF file with download method
+        return $pdf->download('pdf_file.pdf');
+    }
+    public function createFactureAccomptePDF(Mission $mission)
+    {
+        $total = 0;
+        foreach ($mission->missionLines as $line)
+            $total += $line->price * $line->quantity;
+
+        // share data to view
+        view()->share('mission', $mission);
+        view()->share('total', $total);
+
+        $pdf = PDF::loadView('pdf.factureAccompte',  [$mission, $total]);
+
+        // download PDF file with download method
+        return $pdf->download('pdf_file.pdf');
+    }
+    public function createFactureSoldePDF(Mission $mission)
+    {
+        $total = 0;
+        foreach ($mission->missionLines as $line)
+            $total += $line->price * $line->quantity;
+
+        // share data to view
+        view()->share('mission', $mission);
+        view()->share('total', $total);
+
+        $pdf = PDF::loadView('pdf.factureSolde',  [$mission, $total]);
+
+        // download PDF file with download method
+        return $pdf->download('pdf_file.pdf');
+    }
+    public function createFactureNoDevisPDF(Mission $mission)
+    {
+        $total = 0;
+        foreach ($mission->missionLines as $line)
+            $total += $line->price * $line->quantity;
+
+        // share data to view
+        view()->share('mission', $mission);
+        view()->share('total', $total);
+
+        $pdf = PDF::loadView('pdf.factureNoDevis',  [$mission, $total]);
+
+        // download PDF file with download method
+        return $pdf->download('pdf_file.pdf');
+    }
 }
