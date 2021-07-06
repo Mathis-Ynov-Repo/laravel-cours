@@ -29,6 +29,7 @@ class TransactionFactory extends Factory
             'source_id' => $sourceId,
             'price' => $this->faker->numberBetween(1, 1000),
             // 'organisation_id' => \App\Models\Organisation::inRandomOrder()->first(),
+            'paid_at' => $this->faker->date()
         ];
     }
 }

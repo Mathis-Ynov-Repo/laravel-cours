@@ -32,18 +32,17 @@
 <table class="table table-bordered table-responsive-lg">
     <tr>
         <th>No</th>
-        <th>Source id</th>
+        <th>Organisation</th>
         <th>Source type</th>
         <th>Title</th>
         <th>Price</th>
         <th>Paid_at</th>
         <th>Date Created</th>
-        {{-- <th width="280px">Action</th> --}}
     </tr>
     @foreach ($transactions as $transaction)
         <tr>
             <td>{{ $transaction->id }}</td>
-            <td>{{ $transaction->source_id }}</td>
+            <td>{{ $transaction->source->organisation->name }}</td>
             <td>{{ str_replace("\App\Models\\", "", $transaction->source_type) }}</td>
             @if (isset($transaction->source))
                 <td>{{ $transaction->source->title }}</td>

@@ -10,7 +10,7 @@ class Contribution extends Model
     use HasFactory;
 
     public $incrementing = false;
-    protected $with = ['transaction'];
+    protected $with = ['transaction', 'organisation'];
 
 
     protected $fillable = [
@@ -20,6 +20,10 @@ class Contribution extends Model
         'address'
     ];
 
+    public function organisation()
+    {
+        return $this->belongsTo(Organisation::class);
+    }
     public function transaction()
     {
         return $this->morphMany(Transaction::class, 'source');
