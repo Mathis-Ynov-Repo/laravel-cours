@@ -4,7 +4,7 @@
     <div class="col-lg-12 margin-tb">
         <div class="pull-left">
             <h2>Vos Transactions</h2>
-            <h5>TOTAL : {{ array_reduce($transactions->toArray(), function ($acc, $transaction) { return $acc += $transaction['price'];})}}</h5>
+            <h5>TOTAL : {{ array_reduce($transactions->toArray(), function ($acc, $transaction) { return $acc += $transaction['price'];})}}$</h5>
         </div>
         <div class="pull-right">
             <a class="btn btn-primary" href="{{ route('organisations.index') }}" title="Go back"> <i class="fas fa-backward "></i> </a>
@@ -21,6 +21,11 @@
         <label for="check-pay">Is paid 
         <input {{ Request::get('paid') == true ? 'checked' : null }} type="checkbox" id="check-pay" name="check-pay">
         </label>
+        <label for="inp-entreprise">Entreprise
+        <input type="text" id="inp-entreprise" name="inp-entreprise" value="{{Request::get('input')}}">
+        </label>
+        <a id="search-entreprise" style="cursor: pointer"><i class="fas fa-search"></i></a>
+
     </div>
 </div>
 
@@ -52,27 +57,6 @@
             <td>{{ $transaction->price }}</td>
             <td>{{ $transaction->paid_at }}</td>
             <td>{{ date_format($transaction->created_at, 'd-m-Y') }}</td>
-            {{-- <td>
-                <form action="{{ route('organisations.destroy', $organisation->id) }}" method="POST">
-
-                    <a href="{{ route('organisations.show', $organisation->id) }}" title="show">
-                        <i class="fas fa-eye text-success  fa-lg"></i>
-                    </a>
-
-                    <a href="{{ route('organisations.edit', $organisation->id) }}">
-                        <i class="fas fa-edit  fa-lg"></i>
-
-                    </a>
-
-                    @csrf
-                    @method('DELETE')
-
-                    <button type="submit" title="delete" style="border: none; background-color:transparent;">
-                        <i class="fas fa-trash fa-lg text-danger"></i>
-
-                    </button>
-                </form>
-            </td> --}}
         </tr>
     @endforeach
 </table>
@@ -91,6 +75,18 @@
         $('#check-pay').on('click', (e) => {
             let url = document.location
             e.target.checked == true ? searchParams.set("paid", true) : searchParams.delete("paid")
+            const searchParameters = searchParams.toString()
+            if (searchParameters != "")
+                url = document.location.href.replace(document.location.search , '') + '?' + searchParameters
+            else
+                url = document.location.href.replace(document.location.search , '')
+
+            document.location = url
+        })
+        $('#search-entreprise').on('click', () => {
+            let url = document.location
+            let input = $('#inp-entreprise').val()
+            input != "" ? searchParams.set("input", `${input}`) : searchParams.delete("input")
             const searchParameters = searchParams.toString()
             if (searchParameters != "")
                 url = document.location.href.replace(document.location.search , '') + '?' + searchParameters
