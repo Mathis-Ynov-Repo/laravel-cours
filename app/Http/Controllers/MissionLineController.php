@@ -112,6 +112,10 @@ class MissionLineController extends Controller
     public function destroy(MissionLine $missionLine, Request $request)
     {
         $organisation = $request->query->get('organisation_id');
+
+        $transaction = Transaction::where('source_id', $missionLine->mission->id)->first();
+        $transaction->price -= $missionLine->price * $missionLine->quantity;
+        $transaction->save();
         $missionLine->delete();
         return redirect()->route('organisations.edit', $organisation)->with('success', 'Sub-mission deleted');
     }
