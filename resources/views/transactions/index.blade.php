@@ -49,6 +49,14 @@
         <p>{{ $message }}</p>
     </div>
 @endif
+@if ($check = array_reduce($transactions->toArray(), function ($acc, $transaction) {
+                if (!isset($transaction['source']['organisation'])) $acc += 1;
+                return $acc;
+            }) )
+    <div class="alert alert-danger">
+        <p>Erreur : il peut y avoir un probleme de seed qui crée des transactions inutilisées, il faut donc les supprimer avec le bouton lié à ces dernieres. Il en reste : <strong>{{ $check }}</strong></p>
+    </div>
+@endif
 <table class="table table-bordered table-responsive-lg">
     <tr>
         <th>No</th>
