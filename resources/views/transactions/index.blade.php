@@ -4,7 +4,7 @@
     <div class="col-lg-12 margin-tb">
         <div class="pull-left">
             <h2>Vos Transactions</h2>
-            <h5>TOTAL : {{ array_reduce($transactions->toArray(), function ($acc, $transaction) { return $acc += $transaction['price'];})}}$</h5>
+            <h5>TOTAL : {{array_reduce($transactions->toArray(), function ($acc, $transaction) { return $acc += $transaction['price'];}) ?? 0 }}$</h5>
         </div>
         <div class="pull-right">
             <a class="btn btn-primary" href="{{ route('organisations.index') }}" title="Go back"> <i class="fas fa-backward "></i> </a>
@@ -62,7 +62,12 @@
     @foreach ($transactions as $transaction)
         <tr>
             <td>{{ $transaction->id }}</td>
-            <td>{{ $transaction->source->organisation->name }}</td>
+            @if (isset($transaction->source->organisation))
+                <td>{{ $transaction->source->organisation->name }}</td>
+             @else 
+                <td>No name available</td>
+            @endif
+
             <td>{{ str_replace("\App\Models\\", "", $transaction->source_type) }}</td>
             @if (isset($transaction->source))
                 <td>{{ $transaction->source->title }}</td>
@@ -72,6 +77,15 @@
             <td>{{ $transaction->price }}</td>
             <td>{{ $transaction->paid_at }}</td>
             <td>{{ date_format($transaction->created_at, 'd-m-Y') }}</td>
+            @if (!isset($transaction->source))
+                <td><form action="{{ route('transactions.destroy', $transaction->id) }}" method="POST">
+                        @csrf
+                        @method('DELETE')
+                        <button type="submit" title="delete" style="border: none; background-color:transparent;">
+                            <i class="fas fa-trash fa-lg text-danger"></i>
+                        </button>
+                    </form></td>
+            @endif
         </tr>
     @endforeach
 </table>

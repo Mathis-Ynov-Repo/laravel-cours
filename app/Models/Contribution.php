@@ -10,7 +10,7 @@ class Contribution extends Model
     use HasFactory;
 
     public $incrementing = false;
-    protected $with = ['transaction', 'organisation'];
+    protected $with = ['transactions', 'organisation'];
 
 
     protected $fillable = [
@@ -24,8 +24,17 @@ class Contribution extends Model
     {
         return $this->belongsTo(Organisation::class);
     }
-    public function transaction()
+    public function transactions()
     {
         return $this->morphMany(Transaction::class, 'source');
+    }
+    public function delete()
+    {
+        $res = parent::delete();
+        if ($res == true) {
+            $relation = $this->transactions()->getParent();
+            $trans = Transaction::where('source_id', $relation->id)->first();
+            $trans->delete();
+        }
     }
 }

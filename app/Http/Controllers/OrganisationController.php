@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Contribution;
+use App\Models\Mission;
 use App\Models\Organisation;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
@@ -128,7 +130,16 @@ class OrganisationController extends Controller
      */
     public function destroy(Organisation $organisation)
     {
+        $missions = Mission::where('organisation_id', $organisation->id)->get();
+        foreach ($missions as $mission) {
+            $mission->delete();
+        }
+        $contributions = Contribution::where('organisation_id', $organisation->id)->get();
+        foreach ($contributions as $contribution) {
+            $contribution->delete();
+        }
         $organisation->delete();
+
         return redirect()->route('organisations.index')->with('success', 'Organisation deleted');
     }
 }

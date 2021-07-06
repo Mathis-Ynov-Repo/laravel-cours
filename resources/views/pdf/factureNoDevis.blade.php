@@ -1,5 +1,7 @@
-<p>Nom de l'entreprise : {{$mission->organisation->name}}</p>
+<p>Name : {{$mission->organisation->name}}</p>
 <p>Email : {{$mission->organisation->email}}</p>   
+<p>Adress : {{$mission->organisation->address}}</p>   
+<p>Phone : {{$mission->organisation->phone}}</p> 
 <p>Date : {{date('d/m/Y')}}</p>
 <h2>Mission : {{$mission->title}}</h2>
 

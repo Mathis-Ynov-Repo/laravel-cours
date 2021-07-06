@@ -20,7 +20,6 @@ class TransactionController extends Controller
         $input = $request->query->get("input");
         $title = $request->query->get("title");
 
-        $transactions = Transaction::get();
         $conditions = [];
         if ($type) {
             $conditions[] = ["source_type", '\App\Models\\' . ucfirst($type)];
@@ -30,16 +29,20 @@ class TransactionController extends Controller
         }
         if (count($conditions) > 0) {
             $transactions = Transaction::where($conditions)->get();
+        } else {
+            $transactions = Transaction::get();
         }
         if ($input) {
+
             $transactions = $transactions->filter(function ($value) use ($input) {
-                return strtolower($value->source->organisation->name) == strtolower($input);
+                // var_dump($value->source->organisation->name);
+                return str_starts_with(strtolower($value->source->organisation->name), strtolower($input));
             });
         }
 
         if ($title) {
             $transactions = $transactions->filter(function ($value) use ($title) {
-                return strtolower($value->source->title) == strtolower($title);
+                return str_starts_with(strtolower($value->source->title), strtolower($title));
             });
         }
 
@@ -116,6 +119,7 @@ class TransactionController extends Controller
      */
     public function destroy(Transaction $transaction)
     {
-        //
+        $transaction->delete();
+        return redirect()->route('transactions.index')->with('success', 'Bugged transaction deleted');
     }
 }

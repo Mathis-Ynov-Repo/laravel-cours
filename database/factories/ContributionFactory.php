@@ -27,7 +27,7 @@ class ContributionFactory extends Factory
             'title' => $this->faker->word(),
             'comment' => $this->faker->word(),
             'price' => $this->faker->numberBetween(1, 1000),
-            'organisation_id' => \App\Models\Organisation::inRandomOrder()->first(),
+            // 'organisation_id' => \App\Models\Organisation::inRandomOrder()->first(),
         ];
     }
 }
