@@ -18,7 +18,7 @@ class TransactionController extends Controller
         $paid = $request->query->get("paid");
         $year = $request->query->get("year");
         $input = $request->query->get("input");
-
+        $title = $request->query->get("title");
 
         $transactions = Transaction::get();
         $conditions = [];
@@ -33,7 +33,19 @@ class TransactionController extends Controller
         }
         if ($input) {
             $transactions = $transactions->filter(function ($value) use ($input) {
-                return $value->source->organisation->name == $input;
+                return strtolower($value->source->organisation->name) == strtolower($input);
+            });
+        }
+
+        if ($title) {
+            $transactions = $transactions->filter(function ($value) use ($title) {
+                return strtolower($value->source->title) == strtolower($title);
+            });
+        }
+
+        if ($year) {
+            $transactions = $transactions->filter(function ($value) use ($year) {
+                return $value->created_at->year == $year;
             });
         }
 
