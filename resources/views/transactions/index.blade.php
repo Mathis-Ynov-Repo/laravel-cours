@@ -4,10 +4,10 @@
     <div class="col-lg-12 margin-tb">
         <div class="pull-left">
             <h2>Vos Transactions</h2>
+            <h5>TOTAL : {{ array_reduce($transactions->toArray(), function ($acc, $transaction) { return $acc += $transaction['price'];})}}</h5>
         </div>
-        
         <div class="pull-right">
-            <h3>TOTAL : {{ array_reduce($transactions->toArray(), function ($acc, $transaction) { return $acc += $transaction['price'];})}}</h3>
+            <a class="btn btn-primary" href="{{ route('organisations.index') }}" title="Go back"> <i class="fas fa-backward "></i> </a>
         </div>
     </div>
 </div>

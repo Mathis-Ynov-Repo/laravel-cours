@@ -4,7 +4,7 @@
     <div class="row">
         <div class="col-lg-12 margin-tb">
             <div class="pull-left">
-                <h2>Add New Orga</h2>
+                <h2>Add New Organisation</h2>
             </div>
             <div class="pull-right">
                 <a class="btn btn-primary" href="{{ route('organisations.index') }}" title="Go back"> <i class="fas fa-backward "></i> </a>
@@ -68,14 +68,6 @@
                     </select>
                 </div>
             </div>
-            {{-- <div class="col-xs-12 col-sm-12 col-md-12">
-                <div class="form-group">
-                    <strong>Missions:</strong>
-                    <select id="select" class="form-control">
-                        <option value=""></option>
-                    </select>
-                </div>
-            </div> --}}
             <div class="col-xs-12 col-sm-12 col-md-12 text-center">
                 <button type="submit" class="btn btn-primary">Submit</button>
             </div>

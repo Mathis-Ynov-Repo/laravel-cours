@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Mission;
+use App\Models\MissionLine;
 use App\Models\Transaction;
 use Barryvdh\DomPDF\Facade as PDF;
 use Illuminate\Http\Request;
@@ -42,12 +43,12 @@ class MissionController extends Controller
      */
     public function store(Request $request)
     {
+        // dd($request);
         $validated = Validator::make($request->all(), [
             'reference' => 'required|max:255',
             'organisation_id' => 'required',
             'title' => 'required',
             'deposit' => 'required',
-            'ended_at' => 'required',
         ]);
 
         if ($validated->fails()) {
@@ -70,6 +71,18 @@ class MissionController extends Controller
         $transaction->source_id = $mission->id;
         $transaction->price = $mission->deposit;
         $transaction->save();
+        if (isset($request->missionLines)) {
+            foreach ($request->missionLines as $missionLine) {
+                $newMissionLine = new MissionLine();
+                $newMissionLine->id = Str::uuid();
+                $newMissionLine->mission_id = $mission->id;
+                $newMissionLine->title = $missionLine['title'];
+                $newMissionLine->quantity = $missionLine['quantity'];
+                $newMissionLine->price = $missionLine['price'];
+                $newMissionLine->unity = $missionLine['unity'];
+                $newMissionLine->save();
+            }
+        }
         return redirect()->route('organisations.edit', $request->organisation_id)
             ->with('success', 'Mission added');
     }

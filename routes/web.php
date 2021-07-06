@@ -24,13 +24,13 @@ use Illuminate\Support\Facades\Route;
 // })->name('welcome');
 
 
-Route::get('/', [OrganisationController::class, 'index']);
+Route::get('/', [OrganisationController::class, 'index'])->name('welcome')->middleware('auth');
 
 # Socialite URLs
-//TODO Protéger les routes avec le login
 
 // La page où on présente les liens de redirection vers les providers
-Route::get("login-register", [SocialiteController::class, 'loginRegister']);
+Route::get("login", [SocialiteController::class, 'loginRegister'])->name('login');
+
 
 // La redirection vers le provider
 Route::get("redirect/{provider}", [SocialiteController::class, 'redirect'])->name('socialite.redirect');
@@ -38,12 +38,12 @@ Route::get("redirect/{provider}", [SocialiteController::class, 'redirect'])->nam
 // Le callback du provider
 Route::get("callback/{provider}", [SocialiteController::class, 'callback'])->name('socialite.callback');
 
-Route::resource('organisations', OrganisationController::class);
+Route::resource('organisations', OrganisationController::class)->middleware('auth');
 
-Route::resource('contribution', ContributionController::class);
-Route::resource('missions', MissionController::class);
+Route::resource('contribution', ContributionController::class)->middleware('auth');
+Route::resource('missions', MissionController::class)->middleware('auth');
 
-Route::resource('mission_lines', MissionLineController::class);
-Route::resource('transactions', TransactionController::class);
+Route::resource('mission_lines', MissionLineController::class)->middleware('auth');
+Route::resource('transactions', TransactionController::class)->middleware('auth');
 
-Route::get('/mission/{mission}/pdf', [MissionController::class, 'createPDF']);
+Route::get('/mission/{mission}/pdf', [MissionController::class, 'createPDF'])->middleware('auth');

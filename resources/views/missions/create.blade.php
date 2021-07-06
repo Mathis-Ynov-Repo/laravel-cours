@@ -25,7 +25,7 @@
     <form action="{{ route('missions.store') }}" method="POST" >
         @csrf
 
-        <div class="row">
+        <div class="row" id="formRow">
             <div class="col-xs-12 col-sm-12 col-md-12">
                 <div class="form-group">
                     <strong>Reference :</strong>
@@ -47,23 +47,50 @@
                         ></textarea>
                 </div>
             </div>
-            <div class="col-xs-12 col-sm-12 col-md-12">
+            <input type="hidden" name="deposit" value="30" class="form-control"
+                        >
+            {{-- <div class="col-xs-12 col-sm-12 col-md-12">
                 <div class="form-group">
-                    <strong>Deposit :</strong>
+                    <strong>Deposit : 30% auto</strong>
                     <input type="number" name="deposit" class="form-control"
                         >
                 </div>
-            </div>
-            <div class="col-xs-12 col-sm-12 col-md-12">
+            </div> --}}
+            <div class="col-xs-12 col-sm-12 col-md-12" id="endRow">
                 <div class="form-group">
                     <strong>ended_at :</strong>
                     <input type="date" name="ended_at" class="form-control" >
                 </div>
             </div>
-            <div class="col-xs-12 col-sm-12 col-md-12 text-center">
+            <a id="addLine" style="padding: 2em; cursor : pointer">Add mission line</a>
+            <div class="col-xs-12 col-sm-12 col-md-12 text-center" id="submitBtn">
                 <button type="submit" class="btn btn-primary">Submit</button>
             </div>
         </div>
 
     </form>
+@endsection
+@section('page-js-files')
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+@endsection
+@section('page-js-script')
+<script type="text/javascript">
+    $(document).ready(function() {
+        const addLine = $('#addLine');
+        let number = 0;
+        const row = document.getElementById('formRow');
+        const sub = $('#submitBtn');
+        
+        addLine.click(() => {$(`<div class="col-xs-12 col-sm-12 col-md-12">
+                <strong class="mb-3">Mission line</strong>
+                <div class="form-group" style="display: flex">
+                    <input placeholder="Title" style="margin : 5px; background: rgb(200, 200, 200); color : white" type="text" name="missionLines[${number}][title]" class="form-control" >
+                    <input placeholder="Quantity" style="margin : 5px; background: rgb(200, 200, 200); color : white" type="number" name="missionLines[${number}][quantity]" class="form-control" >
+                    <input placeholder="Price" style="margin : 5px; background: rgb(200, 200, 200); color : white" type="number" name="missionLines[${number}][price]" class="form-control" >
+                    <input placeholder="Unity" style="margin : 5px; background: rgb(200, 200, 200); color : white" type="text" name="missionLines[${number}][unity]" class="form-control" >
+                </div>
+            </div>`).insertBefore("#addLine");
+            number += 1})
+    });
+</script>
 @endsection
